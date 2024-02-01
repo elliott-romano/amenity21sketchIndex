@@ -157,7 +157,7 @@ function draw() {
             p.y += p.vy * 0.1;
             reducedMovementParticles++;
           }
-          ellipse(p.x, p.y, 2, 2); // Draw the particle
+          ellipse(p.x, p.y, 1, 1); // Draw the particle
           // Wrap around edges
           if (p.x > width) p.x = 0;
           if (p.y > height) p.y = 0;
