@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tone.js PolySynth with Reverb</title>
+  <script src="https://cdn.jsdelivr.net/npm/tone@14"></script>
+  <style>
+    .hover-div {
+      width: 100px;
+      height: 100px;
+      background-color: #3498db;
+      margin: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div class="hover-div"></div>
+<button onclick="toggleAudioContext()">Toggle Audio</button>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Initialize Tone.js
+    Tone.start();
+
+    // Create PolySynth with AM modulation
+    const synth = new Tone.PolySynth(Tone.Synth, {
+      volume: -8,  // Adjust the volume as needed
+      oscillator: {
+        type: 'sine',  // You can change the oscillator type
+      },
+      envelope: {
+        attack: 0.01,
+        decay: 0.05,
+        sustain: 0.2,
+        release: 2,
+      },
+    }).toDestination();
+
+    // Create Reverb
+    const reverb = new Tone.Reverb({
+      decay: 10, // Adjust reverb decay time as needed
+    }).toDestination();
+
+    // Connect the synth to the reverb
+    synth.connect(reverb);
+
+    // C Pentatonic Scale
+    const scale = ['C2', 'D2', 'E2', 'G2', 'A2','C3', 'D3', 'E3', 'G3', 'A3','C4', 'D4', 'E4', 'G4', 'A4','C5', 'D5', 'E5', 'G5', 'A5'];
+
+    // Maximum polyphony limit
+    const maxPolyphony = 2;
+
+    // Array to store active notes
+    const activeNotes = [];
+
+    // Function to play a random note from the scale
+    function playRandomNote() {
+      // Remove the oldest note if reaching max polyphony
+      if (activeNotes.length >= maxPolyphony) {
+        const oldestNote = activeNotes.shift();
+        synth.triggerRelease(oldestNote);
+      }
+
+      const randomNote = scale[Math.floor(Math.random() * scale.length)];
+      synth.triggerAttack(randomNote);
+      activeNotes.push(randomNote);
+    }
+
+    // Function to stop the synth
+    function stopSynth() {
+      synth.releaseAll();
+      activeNotes.length = 0; // Clear the activeNotes array
+    }
+
+    // Interval ID for cycling notes
+    let intervalId;
+
+    // Hover event listener on the colored div
+    const hoverDiv = document.querySelector('.hover-div');
+    hoverDiv.addEventListener('mouseenter', () => {
+      // Ensure audio context is started by user interaction
+      Tone.start();
+      // Start cycling notes every second
+      intervalId = setInterval(playRandomNote, 100);
+    });
+
+    hoverDiv.addEventListener('mouseleave', () => {
+      // Stop cycling notes when the user stops hovering
+      clearInterval(intervalId);
+      stopSynth();
+    });
+
+    // Cleanup when leaving the page (optional)
+    window.addEventListener('beforeunload', () => {
+      synth.dispose();
+      reverb.dispose();
+    });
+
+    // Function to toggle the audio context
+    window.toggleAudioContext = function() {
+      if (Tone.context.state === 'running') {
+        Tone.context.suspend().then(() => {
+          console.log('Audio context suspended');
+        });
+      } else {
+        Tone.context.resume().then(() => {
+          console.log('Audio context resumed');
+        });
+      }
+    };
+  });
+</script>
+
+<!-- Code injected by live-server -->
+<script>
+  // ... (live server code remains unchanged)
+</script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/p5.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
+</head>
+<body>
+    
+    <script>// Declare variables
+      var font;
+      var off; // Offscreen canvas
+      var particles = [];
+      let svg1;
+      let explode = true;
+      // Preload function for loading assets
+      function preload() {
+        svg1 = loadImage('img/07.png'); // Load the image
+      }
+      // Function to create an explosion effect
+      function createExplosion() {
+        if (explode) {
+          let explosionForce = 5; // Adjust the intensity of the explosion
+          particles.forEach(p => {
+            let angle = atan2(p.y - windowHeight / 2, p.x - windowWidth / 2);
+            p.vx = explosionForce * cos(angle);
+            p.vy = explosionForce * sin(angle);
+          });
+          explode = false; // Turn off the explosion after it occurs
+        }
+      }
+      // Setup function runs once at the start
+      function setup() {
+        createCanvas(windowWidth, windowHeight); // Create a canvas that fills the window
+        background(0); // Set the background color
+        off = createGraphics(windowWidth, windowHeight); // Create an offscreen graphics object
+        // Create particles
+        for (var i = 0; i < 5000; i++) {
+          var newp = { x: random(width), y: random(height), vx: random(-2, 2), vy: random(-2, 2) };
+          particles.push(newp);
+        }
+        off.pixelDensity(1); // Set pixel density for the offscreen graphics
+        positionElements(); // Call the function to position elements
+        createExplosion(); // Trigger the explosion effect
+      }
+      // Function to handle window resizing
+      function windowResized() {
+        resizeCanvas(windowWidth, windowHeight); // Resize the canvas
+        off = createGraphics(windowWidth, windowHeight); // Recreate the offscreen graphics
+        positionElements(); // Reposition elements on resize
+      }
+      function positionElements() {
+        off.clear(); // Clear the offscreen graphics
+        off.pixelDensity(1);
+        off.background(255); // Set the background color for offscreen graphics
+        // Calculate new image dimensions
+        let imgWidth = windowWidth * .75; // Half of the window width
+        let imgHeight = svg1.height * (imgWidth / svg1.width); // Calculate height while maintaining aspect ratio
+        // Center the image
+        let imageX = (windowWidth - imgWidth) / 2;
+        let imageY = (windowHeight - imgHeight) / 2;
+        off.image(svg1, imageX, imageY, imgWidth, imgHeight); // Draw the image on offscreen graphics
+      }
+      // Draw function, continuously executes
+      function draw() {
+        background(255, 255, 255); // Set the background color
+        fill(0, 191, 255); // Set the fill color for particles
+        off.loadPixels(); // Load the pixel data of the offscreen graphics
+        // Iterate through each particle
+        particles.forEach(p => {
+          let offset = (Math.round(p.y) * off.width + Math.round(p.x)) * 4;
+          let typecheck = off.pixels[offset];
+          // Calculate distance to the mouse
+          let d = dist(mouseX, mouseY, p.x, p.y);
+          let maxDistance = 100; // Maximum distance for the mouse to influence particles
+          let mouseInfluence = map(d, 0, maxDistance, 0.1, 0); // Influence decreases with distance
+          if (d < maxDistance) {
+            let angleToMouse = atan2(mouseY - p.y, mouseX - p.x);
+            p.vx += cos(angleToMouse) * mouseInfluence;
+            p.vy += sin(angleToMouse) * mouseInfluence;
+          }
+          if (typecheck > 120) {
+            p.x += p.vx;
+            p.y += p.vy;
+          } else {
+            p.x += p.vx * 0.1;
+            p.y += p.vy * 0.1;
+          }
+          ellipse(p.x, p.y, 1, 1); // Draw the particle
+          // Wrap around edges
+          if (p.x > width) p.x = 0;
+          if (p.y > height) p.y = 0;
+          if (p.x < 0) p.x = width;
+          if (p.y < 0) p.y = height;
+        });
+      }</script>
+</body>
+</html>

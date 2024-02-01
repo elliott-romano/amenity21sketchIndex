@@ -1,0 +1,24 @@
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+}
+
+#grid-container {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr); /* Adjust the number of columns */
+  height: 100vh;
+}
+
+.grid-item {
+  background-color: black;
+  overflow: hidden; /* Keeps the canvas within the div */
+}
+
+.grid-item canvas {
+  display: none;
+}
+
+.grid-item:hover canvas {
+  display: block;
+}
