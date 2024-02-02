@@ -57,6 +57,14 @@
         <iframe src="about:blank"></iframe>
     </div>
 </div>
+<div class="container" data-div-id="div2" data-iframe-src="https://example.com/iframe2.html"
+    onmouseover="startAudio(this)" onmouseout="stopAudio(this)">
+    <img src="img/02.png" alt="img2">
+    <div class="hoverDiv">Hover over me for iframe 2</div>
+    <div class="iframeContainer">
+        <iframe src="about:blank"></iframe>
+    </div>
+</div>
 <!-- Add more containers as needed -->
 
 <script>
@@ -64,30 +72,20 @@
     let oscillator;
 
     function initializeAudioContext() {
-        return new Promise((resolve, reject) => {
+        if (!audioContext) {
             audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            resolve();
-        });
+        }
     }
 
-    async function startAudio(container) {
-        if (!audioContext) {
-            await initializeAudioContext();
-        }
-        // Start your audio here
-        oscillator = audioContext.createOscillator();
-        oscillator.connect(audioContext.destination);
-        oscillator.start();
+    function startAudio(container) {
+        initializeAudioContext();
+    
         showIframe(container);
     }
 
     function stopAudio(container) {
         // Stop your audio here
-        if (oscillator) {
-            oscillator.stop();
-            oscillator.disconnect();
-        }
-        muteIframe(container);
+        
         hideIframe(container);
     }
 
@@ -103,26 +101,16 @@
         iframeContainer.classList.remove('active');
     }
 
-    function muteIframe(container) {
-        const iframe = container.querySelector('iframe');
-        const iframeWindow = iframe.contentWindow;
-        
-        // Use try-catch to handle cross-origin security issues
-        try {
-            // Access the contentWindow and execute scripts in the iframe
-            iframeWindow.postMessage({ command: 'mute' }, '*');
-        } catch (error) {
-            console.error('Unable to mute iframe due to cross-origin restrictions.');
-        }
-    }
+    function stopAudio(container) {
+    // Send a message to the iframe to mute audio
+    const iframe = container.querySelector('iframe');
+    iframe.contentWindow.postMessage('muteAudio', '*');
 
-    // Listen for messages from the iframe
-    window.addEventListener('message', (event) => {
-        if (event.data.command === 'mute') {
-            // Mute the audio inside the iframe (adjust this based on your iframe content)
-            console.log('Muting iframe audio');
-        }
-    });
+    // Hide the iframe
+    hideIframe(container);
+}
+
+
 </script>
 </body>
 </html>
