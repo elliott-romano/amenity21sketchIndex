@@ -1,116 +1,34 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hover Over Divs to Display Iframes</title>
-    <style>
-        .container {
-            position: relative;
-            width: 400px;
-            height: 400px;
-            margin: 20px;
-            display: inline-block;
-            overflow: hidden; /* Hide overflowing content */
-        }
-        .hoverDiv, .iframeContainer, .container img {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            transition: opacity .7s ease-in-out;
-        }
-        .hoverDiv {
-            background-color: #F0F0F0;
-            cursor: pointer;
-            z-index: 1;
-        }
-
-        img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Maintain aspect ratio and cover the container */
-            background-color: white;
-        }
-        .iframeContainer {
-            opacity: 0;
-            z-index: 2;
-        }
-        .iframeContainer.active {
-            opacity: 1;
-        }
-        iframe {
-            border: none;
-            width: 100%;
-            height: 100%;
-        }
-    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.11/p5.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style.css">
 </head>
 <body>
-<div class="container" data-div-id="div1" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch1.html"
-    onmouseover="startAudio(this)" onmouseout="stopAudio(this)">
-    <div class="hoverDiv">
-        <img src="img/01.png" alt="img1">
-    </div>
-    <div class="iframeContainer">
-        <iframe src="about:blank"></iframe>
-    </div>
-</div>
-<div class="container" data-div-id="div2" data-iframe-src="https://example.com/iframe2.html"
-    onmouseover="startAudio(this)" onmouseout="stopAudio(this)">
-    <img src="img/02.png" alt="img2">
-    <div class="hoverDiv">Hover over me for iframe 2</div>
-    <div class="iframeContainer">
-        <iframe src="about:blank"></iframe>
-    </div>
-</div>
-<!-- Add more containers as needed -->
+    <a href="sketches/sketch00.html">sketch0</a>
+    <a href="sketches/sketch01.html">sketch1</a>
+    <a href="sketches/sketch02.html">sketch2</a>
+    <a href="sketches/sketch03.html">sketch3</a>
+    <a href="sketches/sketch04.html">sketch4</a>
+    <a href="sketches/sketch05.html">sketch5</a>
+    <a href="sketches/sketch06.html">sketch6</a>
+    <a href="sketches/sketch07.html">sketch7</a>
+    <a href="sketches/sketch08.html">sketch8</a>
+    <a href="sketches/sketch09.html">sketch9</a>
+    <a href="sketches/sketch10.html">sketch10</a>
+    <a href="sketches/sketch11.html">sketch11</a>
+    <a href="sketches/sketch12.html">sketch12</a>
+    <a href="sketches/sketch13.html">sketch13</a>
+    <a href="sketches/sketch14.html">sketch14</a>
+    <a href="sketches/sketch15.html">sketch15</a>
+    <a href="sketches/sketch16.html">sketch16</a>
+    <a href="sketches/sketch17.html">sketch17</a>
+    <a href="sketches/sketch18.html">sketch18</a>
+    <a href="sketches/sketch19.html">sketch19</a>
+    <a href="sketches/sketch20.html">sketch20</a>
+    <a href="sketches/sketch21.html">sketch21</a>
+    <a href="sketches/sketch22.html">sketch22</a>
+    <a href="sketches/sketch23.html">sketch23</a>
 
-<script>
-    let audioContext;
-    let oscillator;
-
-    function initializeAudioContext() {
-        if (!audioContext) {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        }
-    }
-
-    function startAudio(container) {
-        initializeAudioContext();
-    
-        showIframe(container);
-    }
-
-    function stopAudio(container) {
-        // Stop your audio here
-        
-        hideIframe(container);
-    }
-
-    function showIframe(container) {
-        const iframeSrc = container.dataset.iframeSrc;
-        const iframeContainer = container.querySelector('.iframeContainer');
-        iframeContainer.classList.add('active');
-        iframeContainer.querySelector('iframe').src = iframeSrc;
-    }
-
-    function hideIframe(container) {
-        const iframeContainer = container.querySelector('.iframeContainer');
-        iframeContainer.classList.remove('active');
-    }
-
-    function stopAudio(container) {
-    // Send a message to the iframe to mute audio
-    const iframe = container.querySelector('iframe');
-    iframe.contentWindow.postMessage('muteAudio', '*');
-
-    // Hide the iframe
-    hideIframe(container);
-}
-
-
-</script>
 </body>
 </html>

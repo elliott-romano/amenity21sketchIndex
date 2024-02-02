@@ -11,13 +11,15 @@
             height: 400px;
             margin: 20px;
             display: inline-block;
+            overflow: hidden; /* Hide overflowing content */
         }
-        .hoverDiv, .iframeContainer {
+        .hoverDiv, .iframeContainer, .container img {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
+            transition: opacity .7s ease-in-out;
         }
         .hoverDiv {
             background-color: #F0F0F0;
@@ -28,10 +30,15 @@
         img {
             width: 100%;
             height: 100%;
+            object-fit: cover; /* Maintain aspect ratio and cover the container */
+            background-color: white;
         }
         .iframeContainer {
-            display: none;
+            opacity: 0;
             z-index: 2;
+        }
+        .iframeContainer.active {
+            opacity: 1;
         }
         iframe {
             border: none;
@@ -41,31 +48,69 @@
     </style>
 </head>
 <body>
-<div class="container">
-    <div id="div1" class="hoverDiv">Hover over me for iframe 1</div>
-    <div id="iframe1Container" class="iframeContainer">
+<div class="container" data-div-id="div1" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch1.html"
+    onmouseover="startAudio(this)" onmouseout="stopAudio(this)">
+    <div class="hoverDiv">
+        <img src="img/01.png" alt="img1">
+    </div>
+    <div class="iframeContainer">
         <iframe src="about:blank"></iframe>
     </div>
 </div>
-<div class="container">
-    <div id="div2" class="hoverDiv">Hover over me for iframe 2</div>
-    <div id="iframe2Container" class="iframeContainer">
+<div class="container" data-div-id="div2" data-iframe-src="https://example.com/iframe2.html"
+    onmouseover="startAudio(this)" onmouseout="stopAudio(this)">
+    <img src="img/02.png" alt="img2">
+    <div class="hoverDiv">Hover over me for iframe 2</div>
+    <div class="iframeContainer">
         <iframe src="about:blank"></iframe>
     </div>
 </div>
+<!-- Add more containers as needed -->
 
 <script>
-    document.getElementById('div1').addEventListener('mouseover', function() {
-        document.getElementById('iframe1Container').style.display = 'block';
-        document.getElementById('iframe2Container').style.display = 'none';
-        document.getElementById('iframe1Container').querySelector('iframe').src = "https://elliott-romano.github.io/amenity21sketchIndex/sketch1.html"; // Replace with your desired URL
-    });
-    document.getElementById('div2').addEventListener('mouseover', function() {
-        document.getElementById('iframe2Container').style.display = 'block';
-        document.getElementById('iframe1Container').style.display = 'none';
-        document.getElementById('iframe2Container').querySelector('iframe').src = "https://elliott-romano.github.io/amenity21sketchIndex/sketch2.html"; // Replace with your desired URL
+    let audioContext;
+    let oscillator;
+
+    function initializeAudioContext() {
+        if (!audioContext) {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        }
+    }
+
+    function startAudio(container) {
+        initializeAudioContext();
     
-    });
+        showIframe(container);
+    }
+
+    function stopAudio(container) {
+        // Stop your audio here
+        
+        hideIframe(container);
+    }
+
+    function showIframe(container) {
+        const iframeSrc = container.dataset.iframeSrc;
+        const iframeContainer = container.querySelector('.iframeContainer');
+        iframeContainer.classList.add('active');
+        iframeContainer.querySelector('iframe').src = iframeSrc;
+    }
+
+    function hideIframe(container) {
+        const iframeContainer = container.querySelector('.iframeContainer');
+        iframeContainer.classList.remove('active');
+    }
+
+    function stopAudio(container) {
+    // Send a message to the iframe to mute audio
+    const iframe = container.querySelector('iframe');
+    iframe.contentWindow.postMessage('muteAudio', '*');
+
+    // Hide the iframe
+    hideIframe(container);
+}
+
+
 </script>
 </body>
 </html>
