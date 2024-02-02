@@ -11,15 +11,13 @@
             height: 400px;
             margin: 20px;
             display: inline-block;
-            overflow: hidden; /* Hide overflowing content */
         }
-        .hoverDiv, .iframeContainer, .container img {
+        .hoverDiv, .iframeContainer {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            transition: opacity .7s ease-in-out;
         }
         .hoverDiv {
             background-color: #F0F0F0;
@@ -30,14 +28,15 @@
         img {
             width: 100%;
             height: 100%;
-            object-fit: cover; /* Maintain aspect ratio and cover the container */
-            background-color: white;
         }
         .iframeContainer {
-            opacity: 0;
+            display: none;
             z-index: 2;
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out;
         }
         .iframeContainer.active {
+            display: block;
             opacity: 1;
         }
         iframe {
@@ -48,69 +47,111 @@
     </style>
 </head>
 <body>
-<div class="container" data-div-id="div1" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch1.html"
-    onmouseover="startAudio(this)" onmouseout="stopAudio(this)">
-    <div class="hoverDiv">
-        <img src="img/01.png" alt="img1">
+<div id="containerWrapper">
+    <div class="container" data-div-id="div0" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch00.html">
+        <div class="hoverDiv">
+            <img src="img/00.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
     </div>
-    <div class="iframeContainer">
-        <iframe src="about:blank"></iframe>
+    <div class="container" data-div-id="div1" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch01.html">
+        <div class="hoverDiv">
+            <img src="img/01.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
     </div>
+    <div class="container" data-div-id="div2" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch02.html">
+        <div class="hoverDiv">
+            <img src="img/02.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+    </div>
+    <div class="container" data-div-id="div3" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch03.html">
+        <div class="hoverDiv">
+            <img src="img/03.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+    </div>
+    <div class="container" data-div-id="div4" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch04.html">
+        <div class="hoverDiv">
+            <img src="img/04.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+    </div>
+    <div class="container" data-div-id="div5" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch05.html">
+        <div class="hoverDiv">
+            <img src="img/05.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+    </div>
+    <div class="container" data-div-id="div6" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch06.html">
+        <div class="hoverDiv">
+            <img src="img/06.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+    </div>
+    <div class="container" data-div-id="div7" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch07.html">
+        <div class="hoverDiv">
+            <img src="img/07.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+    </div>
+    <div class="container" data-div-id="div8" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch08.html">
+        <div class="hoverDiv">
+            <img src="img/08.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+    </div>
+    <div class="container" data-div-id="div9" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch09.html">
+        <div class="hoverDiv">
+            <img src="img/09.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+    </div>
+    
+
 </div>
-<div class="container" data-div-id="div2" data-iframe-src="https://example.com/iframe2.html"
-    onmouseover="startAudio(this)" onmouseout="stopAudio(this)">
-    <img src="img/02.png" alt="img2">
-    <div class="hoverDiv">Hover over me for iframe 2</div>
-    <div class="iframeContainer">
-        <iframe src="about:blank"></iframe>
-    </div>
-</div>
-<!-- Add more containers as needed -->
 
 <script>
-    let audioContext;
-    let oscillator;
-
-    function initializeAudioContext() {
-        if (!audioContext) {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    document.getElementById('containerWrapper').addEventListener('mouseover', function(event) {
+        const hoveredDiv = event.target.closest('.container');
+        if (hoveredDiv) {
+            const iframeSrc = hoveredDiv.dataset.iframeSrc;
+            const allContainers = document.querySelectorAll('.iframeContainer');
+            
+            allContainers.forEach(container => {
+                if (container.parentElement === hoveredDiv) {
+                    container.classList.add('active');
+                    container.querySelector('iframe').src = iframeSrc;
+                } else {
+                    container.classList.remove('active');
+                    // Stop audio and reload iframe
+                    const inactiveIframe = container.querySelector('iframe');
+                    inactiveIframe.src = "about:blank";
+                }
+            });
         }
-    }
-
-    function startAudio(container) {
-        initializeAudioContext();
-    
-        showIframe(container);
-    }
-
-    function stopAudio(container) {
-        // Stop your audio here
-        
-        hideIframe(container);
-    }
-
-    function showIframe(container) {
-        const iframeSrc = container.dataset.iframeSrc;
-        const iframeContainer = container.querySelector('.iframeContainer');
-        iframeContainer.classList.add('active');
-        iframeContainer.querySelector('iframe').src = iframeSrc;
-    }
-
-    function hideIframe(container) {
-        const iframeContainer = container.querySelector('.iframeContainer');
-        iframeContainer.classList.remove('active');
-    }
-
-    function stopAudio(container) {
-    // Send a message to the iframe to mute audio
-    const iframe = container.querySelector('iframe');
-    iframe.contentWindow.postMessage('muteAudio', '*');
-
-    // Hide the iframe
-    hideIframe(container);
-}
-
-
+    });
 </script>
 </body>
 </html>
