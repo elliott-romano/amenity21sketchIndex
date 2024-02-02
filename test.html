@@ -5,12 +5,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Hover Over Divs to Display Iframes</title>
     <style>
+        #containerWrapper {
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap;
+            justify-content: space-evenly;
+            height: 100vh;
+        }
+
         .container {
             position: relative;
-            width: 400px;
-            height: 400px;
+            width: 450px;
+            height: 450px;
             margin: 20px;
-            display: inline-block;
+            /* display: inline-block; */
+        
         }
         .hoverDiv, .iframeContainer {
             position: absolute;
@@ -44,6 +53,25 @@
             width: 100%;
             height: 100%;
         }
+        .overlayText {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white; /* Adjust text color */
+            mix-blend-mode: difference;
+            font-size: 32px; /* Adjust font size */
+            font-family: sans-serif;
+            text-transform: uppercase;
+            text-align: center;
+            z-index: 3;
+            opacity: 0;
+            pointer-events: none; /* Allow pointer events to pass through the overlay text */
+            transition: opacity 0.3s ease-in-out;
+        }
+        .container:hover .overlayText {
+            opacity: 1;
+        }
     </style>
 </head>
 <body>
@@ -55,15 +83,17 @@
         <div class="iframeContainer">
             <iframe src="about:blank"></iframe>
         </div>
+        <div class="overlayText">Teatro Farnese, Parma</div>
     </div>
-    <div class="container" data-div-id="div1" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch01.html">
-        <div class="hoverDiv">
-            <img src="img/01.png">
+        <div class="container" data-div-id="div1" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch01.html">
+            <div class="hoverDiv">
+                <img src="img/01.png">
+            </div>
+            <div class="iframeContainer">
+                <iframe src="about:blank"></iframe>
+            </div>
+            <div class="overlayText">Haydn-Saal, Eisenstadt</div>
         </div>
-        <div class="iframeContainer">
-            <iframe src="about:blank"></iframe>
-        </div>
-    </div>
     <div class="container" data-div-id="div2" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch02.html">
         <div class="hoverDiv">
             <img src="img/02.png">
@@ -71,7 +101,9 @@
         <div class="iframeContainer">
             <iframe src="about:blank"></iframe>
         </div>
+        <div class="overlayText">Music Room, Eszterháza</div>
     </div>
+
     <div class="container" data-div-id="div3" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch03.html">
         <div class="hoverDiv">
             <img src="img/03.png">
@@ -79,6 +111,7 @@
         <div class="iframeContainer">
             <iframe src="about:blank"></iframe>
         </div>
+        <div class="overlayText">Hanover Square Rooms, London</div>
     </div>
     <div class="container" data-div-id="div4" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch04.html">
         <div class="hoverDiv">
@@ -87,6 +120,7 @@
         <div class="iframeContainer">
             <iframe src="about:blank"></iframe>
         </div>
+        <div class="overlayText">Theatre of SS. Giovanni e Paolo, Venice</div>
     </div>
     <div class="container" data-div-id="div5" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch05.html">
         <div class="hoverDiv">
@@ -95,6 +129,7 @@
         <div class="iframeContainer">
             <iframe src="about:blank"></iframe>
         </div>
+        <div class="overlayText">Unknown Jazz Club, New York</div>
     </div>
     <div class="container" data-div-id="div6" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch06.html">
         <div class="hoverDiv">
@@ -103,6 +138,7 @@
         <div class="iframeContainer">
             <iframe src="about:blank"></iframe>
         </div>
+        <div class="overlayText">Drottingholm summer palace, stockholm</div>
     </div>
     <div class="container" data-div-id="div7" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch07.html">
         <div class="hoverDiv">
@@ -111,6 +147,7 @@
         <div class="iframeContainer">
             <iframe src="about:blank"></iframe>
         </div>
+        <div class="overlayText">Markgräfliches Opernhaus, Bayreuth</div>
     </div>
     <div class="container" data-div-id="div8" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch08.html">
         <div class="hoverDiv">
@@ -119,6 +156,7 @@
         <div class="iframeContainer">
             <iframe src="about:blank"></iframe>
         </div>
+        <div class="overlayText">Roy Thompson Hall, Toronto</div>
     </div>
     <div class="container" data-div-id="div9" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch09.html">
         <div class="hoverDiv">
@@ -127,9 +165,135 @@
         <div class="iframeContainer">
             <iframe src="about:blank"></iframe>
         </div>
+        <div class="overlayText">Unknown Hall, Europe</div>
     </div>
-    
-
+    <div class="container" data-div-id="div10" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch10.html">
+        <div class="hoverDiv">
+            <img src="img/10.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+        <div class="overlayText">Unknown Hall, Europe</div>
+    </div>
+    <div class="container" data-div-id="div11" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch11.html">
+        <div class="hoverDiv">
+            <img src="img/11.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+        <div class="overlayText">Unknown Hall, Europe</div>
+    </div>
+    <div class="container" data-div-id="div12" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch12.html">
+        <div class="hoverDiv">
+            <img src="img/12.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+        <div class="overlayText">Unknown Hall, Europe</div>
+    </div>
+    <div class="container" data-div-id="div13" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch13.html">
+        <div class="hoverDiv">
+            <img src="img/13.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+        <div class="overlayText">Unknown Hall, Europe</div>
+    </div>
+    <div class="container" data-div-id="div14" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch14.html">
+        <div class="hoverDiv">
+            <img src="img/14.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+        <div class="overlayText">Unknown Hall, Europe</div>
+    </div>
+    <!-- <div class="container" data-div-id="div15" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch15.html">
+        <div class="hoverDiv">
+            <img src="img/15.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+        <div class="overlayText">Unknown Hall, Europe</div>
+    </div> -->
+    <div class="container" data-div-id="div16" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch16.html">
+        <div class="hoverDiv">
+            <img src="img/16.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+        <div class="overlayText">Unknown Hall, Europe</div>
+    </div>
+    <div class="container" data-div-id="div17" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch17.html">
+        <div class="hoverDiv">
+            <img src="img/17.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+        <div class="overlayText">Unknown Hall, Europe</div>
+    </div>
+    <div class="container" data-div-id="div18" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch18.html">
+        <div class="hoverDiv">
+            <img src="img/18.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+        <div class="overlayText">Unknown Hall, Europe</div>
+    </div>
+    <div class="container" data-div-id="div19" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch19.html">
+        <div class="hoverDiv">
+            <img src="img/19.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+        <div class="overlayText">Unknown Hall, Europe</div>
+    </div>
+    <div class="container" data-div-id="div20" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch20.html">
+        <div class="hoverDiv">
+            <img src="img/20.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+        <div class="overlayText">Unknown Hall, Europe</div>
+    </div>
+    <div class="container" data-div-id="div21" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch21.html">
+        <div class="hoverDiv">
+            <img src="img/21.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+        <div class="overlayText">Unknown Hall, Europe</div>
+    </div>
+    <div class="container" data-div-id="div22" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch22.html">
+        <div class="hoverDiv">
+            <img src="img/22.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+        <div class="overlayText">Unknown Hall, Europe</div>
+    </div>
+    <div class="container" data-div-id="div23" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch23.html">
+        <div class="hoverDiv">
+            <img src="img/23.png">
+        </div>
+        <div class="iframeContainer">
+            <iframe src="about:blank"></iframe>
+        </div>
+        <div class="overlayText">Unknown Hall, Europe</div>
+    </div>
+ 
 </div>
 
 <script>
