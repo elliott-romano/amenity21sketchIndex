@@ -7,8 +7,8 @@
     <style>
         .container {
             position: relative;
-            width: 200px;
-            height: 200px;
+            width: 400px;
+            height: 400px;
             margin: 20px;
             display: inline-block;
         }
@@ -23,6 +23,11 @@
             background-color: #F0F0F0;
             cursor: pointer;
             z-index: 1;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
         }
         .iframeContainer {
             display: none;
@@ -48,6 +53,7 @@
         <iframe src="about:blank"></iframe>
     </div>
 </div>
+
 <script>
     document.getElementById('div1').addEventListener('mouseover', function() {
         document.getElementById('iframe1Container').style.display = 'block';
@@ -58,6 +64,7 @@
         document.getElementById('iframe2Container').style.display = 'block';
         document.getElementById('iframe1Container').style.display = 'none';
         document.getElementById('iframe2Container').querySelector('iframe').src = "https://elliott-romano.github.io/amenity21sketchIndex/sketch2.html"; // Replace with your desired URL
+    
     });
 </script>
 </body>

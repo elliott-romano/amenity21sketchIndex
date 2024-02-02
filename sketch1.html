@@ -16,6 +16,7 @@ var off; // Offscreen canvas
 var particles = [];
 let svg1;
 let explode = true;
+let cursorOverCanvas = false;
 
 // Preload function for loading assets
 function preload() {
@@ -27,7 +28,7 @@ Tone.start();
 
 // Create PolySynth with AM modulation
 const synth = new Tone.PolySynth(Tone.Synth, {
-      volume: -8,  // Adjust the volume as needed
+      volume: -30,  // Adjust the volume as needed
       oscillator: {
         type: 'sine',  // You can change the oscillator type
       },
@@ -35,13 +36,13 @@ const synth = new Tone.PolySynth(Tone.Synth, {
         attack: 0.01,
         decay: 0.05,
         sustain: 0.2,
-        release: 2,
+        release: .5,
       },
     }).toDestination();
 
     // Create Reverb
     const reverb = new Tone.Reverb({
-      decay: 5, // Adjust reverb decay time as needed
+      decay: 15, // Adjust reverb decay time as needed
     }).toDestination();
 
     // Connect the synth to the reverb
@@ -130,6 +131,31 @@ function positionElements() {
   off.image(svg1, imageX, imageY, imgWidth, imgHeight); // Draw the image on offscreen graphics
 }
 
+// Event listener for when the cursor enters the canvas
+function mouseEnteredCanvas() {
+    cursorOverCanvas = true;
+    // Start the sound when the cursor enters the canvas
+    Tone.start();
+    intervalId = setInterval(playRandomNote, 400);
+  }
+
+  // Event listener for when the cursor leaves the canvas
+  function mouseLeftCanvas() {
+    cursorOverCanvas = false;
+    // Stop the sound when the cursor leaves the canvas
+    clearInterval(intervalId);
+    stopSynth(); // You might also want to stop the synth when the cursor leaves
+  }
+
+  // Attach the event listeners to the canvas
+  let canvas = document.querySelector('canvas');
+  if (canvas) {
+    canvas.addEventListener('mouseenter', mouseEnteredCanvas);
+    canvas.addEventListener('mouseleave', mouseLeftCanvas);
+  } else {
+    console.error('Canvas element not found.');
+  }
+
 // Draw function, continuously executes
 function draw() {
   background(255, 255, 255); // Set the background color
@@ -170,10 +196,20 @@ function draw() {
   tenPercentOfReducedMovement = reducedMovementParticles * 0.5;
 
   // Log the result to the console
-  console.log('10% of reducedMovementParticles count:', tenPercentOfReducedMovement.toFixed(2));
+  // console.log('10% of reducedMovementParticles count:', tenPercentOfReducedMovement.toFixed(2));
 
   reducedMovementParticles = 0; // Reset the counter for the next frame
 }
+
+// Inside the iframe content (p5 sketch or similar)
+window.addEventListener('message', function(event) {
+    if (event.data === 'muteAudio') {
+        // Mute audio logic here
+    } else if (event.data === 'unmuteAudio') {
+        // Unmute audio logic here
+    }
+});
+
 
 
 

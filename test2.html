@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hover Over Divs to Display Iframes</title>
+    <style>
+        .container {
+            position: relative;
+            width: 400px;
+            height: 400px;
+            margin: 20px;
+            display: inline-block;
+            overflow: hidden; /* Hide overflowing content */
+        }
+        .hoverDiv, .iframeContainer, .container img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            transition: opacity .7s ease-in-out;
+        }
+        .hoverDiv {
+            background-color: #F0F0F0;
+            cursor: pointer;
+            z-index: 1;
+        }
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Maintain aspect ratio and cover the container */
+            background-color: white;
+        }
+        .iframeContainer {
+            opacity: 0;
+            z-index: 2;
+        }
+        .iframeContainer.active {
+            opacity: 1;
+        }
+        iframe {
+            border: none;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+<body>
+<div class="container" data-div-id="div1" data-iframe-src="https://elliott-romano.github.io/amenity21sketchIndex/sketch1.html"
+    onmouseover="startAudio(this)" onmouseout="stopAudio(this)">
+    <div class="hoverDiv">
+        <img src="img/01.png" alt="img1">
+    </div>
+    <div class="iframeContainer">
+        <iframe src="about:blank"></iframe>
+    </div>
+</div>
+<!-- Add more containers as needed -->
+
+<script>
+    let audioContext;
+    let oscillator;
+
+    function initializeAudioContext() {
+        return new Promise((resolve, reject) => {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            resolve();
+        });
+    }
+
+    async function startAudio(container) {
+        if (!audioContext) {
+            await initializeAudioContext();
+        }
+        // Start your audio here
+        oscillator = audioContext.createOscillator();
+        oscillator.connect(audioContext.destination);
+        oscillator.start();
+        showIframe(container);
+    }
+
+    function stopAudio(container) {
+        // Stop your audio here
+        if (oscillator) {
+            oscillator.stop();
+            oscillator.disconnect();
+        }
+        muteIframe(container);
+        hideIframe(container);
+    }
+
+    function showIframe(container) {
+        const iframeSrc = container.dataset.iframeSrc;
+        const iframeContainer = container.querySelector('.iframeContainer');
+        iframeContainer.classList.add('active');
+        iframeContainer.querySelector('iframe').src = iframeSrc;
+    }
+
+    function hideIframe(container) {
+        const iframeContainer = container.querySelector('.iframeContainer');
+        iframeContainer.classList.remove('active');
+    }
+
+    function muteIframe(container) {
+        const iframe = container.querySelector('iframe');
+        const iframeWindow = iframe.contentWindow;
+        
+        // Use try-catch to handle cross-origin security issues
+        try {
+            // Access the contentWindow and execute scripts in the iframe
+            iframeWindow.postMessage({ command: 'mute' }, '*');
+        } catch (error) {
+            console.error('Unable to mute iframe due to cross-origin restrictions.');
+        }
+    }
+
+    // Listen for messages from the iframe
+    window.addEventListener('message', (event) => {
+        if (event.data.command === 'mute') {
+            // Mute the audio inside the iframe (adjust this based on your iframe content)
+            console.log('Muting iframe audio');
+        }
+    });
+</script>
+</body>
+</html>
